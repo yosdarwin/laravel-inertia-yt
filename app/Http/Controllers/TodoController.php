@@ -8,6 +8,21 @@ use Inertia\Inertia;
 
 class TodoController extends Controller
 {
+    public function edit(Todo $todo){
+        return Inertia::render('Edit', [
+            'todo' => $todo
+        ]);
+    }
+
+    public function update(Request $request, Todo $todo){
+        $data = $request->validate([
+            'name' => 'required|min:3'
+        ]);
+        $todo->update($data);
+
+        return redirect(route("todo.index"))->with('message', 'Data berhasil diupdate');
+    }
+
     public function index(){        
         return Inertia::render('Todo', [
             'todos' => Todo::latest()->paginate(2)
